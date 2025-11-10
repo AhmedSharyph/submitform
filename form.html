@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaccine Stock Submission</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-4">
+  <div class="max-w-3xl mx-auto bg-white shadow-md rounded-xl p-6">
+    <h2 class="text-2xl font-semibold mb-4 text-center text-blue-700">Vaccine Stock Entry Form</h2>
+
+    <form id="vaccineForm" class="space-y-4">
+      <!-- Facility Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Facility Name</label>
+        <input type="text" name="FacilityName" required class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200" required>
+      </div>
+
+      <!-- HPV Batch 1 -->
+      <div class="grid md:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">HPV Batch 1 Number</label>
+          <input type="text" name="HPVBatch1Number" class="w-full border rounded-lg p-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">HPV Batch 1 Expiry</label>
+          <input type="date" name="HPVBatch1Expiry" class="w-full border rounded-lg p-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">HPV Batch 1 Balance</label>
+          <input type="number" name="HPVBatch1Balance" min="0" class="w-full border rounded-lg p-2">
+        </div>
+      </div>
+
+      <!-- HPV Batch 2 -->
+      <div class="grid md:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">HPV Batch 2 Number</label>
+          <input type="text" name="HPVBatch2Number" class="w-full border rounded-lg p-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">HPV Batch 2 Expiry</label>
+          <input type="date" name="HPVBatch2Expiry" class="w-full border rounded-lg p-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">HPV Batch 2 Balance</label>
+          <input type="number" name="HPVBatch2Balance" min="0" class="w-full border rounded-lg p-2">
+        </div>
+      </div>
+
+      <!-- DPT Batch 1 -->
+      <div class="grid md:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">DPT Batch 1 Number</label>
+          <input type="text" name="DPTBatch1Number" class="w-full border rounded-lg p-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">DPT Batch 1 Expiry</label>
+          <input type="date" name="DPTBatch1Expiry" class="w-full border rounded-lg p-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">DPT Batch 1 Balance</label>
+          <input type="number" name="DPTBatch1Balance" min="0" class="w-full border rounded-lg p-2">
+        </div>
+      </div>
+
+      <!-- DPT Batch 2 -->
+      <div class="grid md:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">DPT Batch 2 Number</label>
+          <input type="text" name="DPTBatch2Number" class="w-full border rounded-lg p-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">DPT Batch 2 Expiry</label>
+          <input type="date" name="DPTBatch2Expiry" class="w-full border rounded-lg p-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">DPT Batch 2 Balance</label>
+          <input type="number" name="DPTBatch2Balance" min="0" class="w-full border rounded-lg p-2">
+        </div>
+      </div>
+
+      <!-- Checked By -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Checked By</label>
+        <input type="text" name="CheckedBy" class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-200">
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700">Submit</button>
+
+      <p id="message" class="text-center mt-3 text-sm"></p>
+    </form>
+  </div>
+
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbwON8In_biaqfv4rHpIoosc71vNzsWGVdHe7E7ZdCQjOAMV2Lmb7wNYjyLt6asogGlTRQ/exec'; // <-- Replace with your Google Apps Script Web App URL
+
+  document.getElementById('vaccineForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const data = {};
+
+    formData.forEach((value, key) => data[key] = value);
+
+    const message = document.getElementById('message');
+    message.textContent = "Submitting...";
+    message.className = "text-blue-600 text-center mt-3";
+
+    fetch(scriptURL, {
+      method: 'POST',
+      mode: 'no-cors', // required for Blogger-hosted HTML
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(() => {
+      message.textContent = "✅ Data submitted successfully!";
+      message.className = "text-green-600 text-center mt-3";
+      form.reset();
+    })
+    .catch(error => {
+      console.error('Error!', error);
+      message.textContent = "❌ Submission failed. Please try again.";
+      message.className = "text-red-600 text-center mt-3";
+    });
+  });
+</script>
+</body>
+</html>
